@@ -3,7 +3,10 @@ import ToDo from "./Todo";
 
 function App() {
   const [inputText, setInputText] = useState("");
-  const [items, setItems] = useState([]);
+  const [items, setItems] = useState(localStorage.getItem('itemsLS') ? JSON.parse(localStorage.getItem('itemsLS')) : []);
+  React.useEffect(() => {
+    localStorage.setItem('itemsLS', JSON.stringify(items));
+  }, [items]);
 
   function handleChange(event) {
     const newValue = event.target.value;
@@ -11,9 +14,11 @@ function App() {
   }
 
   function addItem() {
-    setItems((prevItems) => {
-      return [...prevItems, inputText];
-    });
+    if(inputText !== ""){
+      setItems((prevItems) => {
+        return [...prevItems, inputText];
+      });
+    }
     setInputText("");
   }
   function deleteItem(id) {
